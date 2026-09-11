@@ -1,0 +1,9 @@
+{
+  "id": "marriage-companion",
+  "name": "Marriage Companion",
+  "version": "1.0.0",
+  "minAppVersion": "1.5.0",
+  "description": "A Markdown-first, Christ-centered family checkup companion.",
+  "author": "Red-Beard",
+  "isDesktopOnly": false
+}
