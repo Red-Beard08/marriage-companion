@@ -1,4 +1,5 @@
 import { App, ItemView, Modal, Notice, Plugin, PluginSettingTab, Setting, TFile, TFolder, WorkspaceLeaf, normalizePath } from "obsidian";
+import { registerDashboardModule, registerDashboardWidget } from "./dashboard-bridge";
 
 type Rating = "thriving" | "healthy" | "attention" | "struggling" | "crisis";
 type Cadence = "weekly" | "biweekly" | "monthly";
@@ -76,3 +77,23 @@ export default class MarriageCompanionPlugin extends Plugin { settings: Settings
   async openFile(path: string): Promise<void> { const file = this.app.vault.getAbstractFileByPath(path); if (file instanceof TFile) await this.app.workspace.getLeaf("tab").openFile(file); }
   async refreshDashboard(): Promise<void> { const view = this.app.workspace.getLeavesOfType(VIEW)[0]?.view; if (view instanceof TargetView) await view.render(); }
 }
+// Red-Beard Dashboard integration: launcher module and independent summary widget.
+const rbDisposals = new WeakMap<object, () => void>();
+const rbOnload = MarriageCompanionPlugin.prototype.onload;
+MarriageCompanionPlugin.prototype.onload = async function(this: MarriageCompanionPlugin) {
+  await rbOnload.call(this);
+  const disposals = [
+    registerDashboardModule(this.app, { id: "marriage-companion", name: "Family Companion", command: "marriage-companion:open-dashboard", icon: "heart-handshake", description: "Family health and check-in overview.", order: 20 }),
+    registerDashboardWidget(this.app, { id: "marriage-companion/overview", name: "Family Companion", description: "Family health and check-in overview.", icon: "heart-handshake", defaultLayout: { w: 4, mobileW: 12, h: 2, order: 40 }, mobile: "responsive", render: (_ctx, container) => {
+      container.createEl("p", { text: "Family health and check-in overview." });
+      const button = container.createEl("button", { text: "Open Family Companion" });
+      button.onclick = () => void this.openDashboard();
+    } })
+  ];
+  rbDisposals.set(this, () => disposals.forEach(dispose => dispose()));
+};
+const rbOnunload = MarriageCompanionPlugin.prototype.onunload;
+MarriageCompanionPlugin.prototype.onunload = function(this: MarriageCompanionPlugin) {
+  rbDisposals.get(this)?.();
+ return rbOnunload ? rbOnunload.call(this) : undefined;
+};
