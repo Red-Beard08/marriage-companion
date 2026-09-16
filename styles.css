@@ -67,3 +67,12 @@
   .marriage-companion-wizard-nav button { flex: 1 1 140px; min-height: 44px; }
   .marriage-companion-comparison-grid { font-size: .82rem; }
 }
+
+/* One category/question per page; people are sub-sections within that question. */
+.marriage-companion-target-answers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 18px; }
+.marriage-companion-target-answer { border: 1px solid var(--background-modifier-border); border-radius: 12px; padding: 14px; background: var(--background-primary); }
+.marriage-companion-target-answer h3 { margin: 0 0 8px; color: var(--text-accent); }
+.marriage-companion-target-answer .setting-item { display: grid; grid-template-columns: 1fr; gap: 6px; padding: 10px 0; }
+.marriage-companion-target-answer .setting-item-info { min-width: 0; }
+.marriage-companion-target-answer textarea { min-height: 80px; }
+@media (max-width: 700px) { .marriage-companion-target-answers { grid-template-columns: 1fr; } }
