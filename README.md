@@ -1,19 +1,53 @@
-# Marriage Companion / Family Companion
+# Family Companion (Marriage Companion)
 
-Marriage Companion is a Markdown-first, Christ-centered family checkup plugin for Obsidian. The compatible plugin ID and root folder remain unchanged, while the workflow now supports whole-family, marriage, and individual-member check-ins.
+Family Companion is a mobile-compatible, Markdown-first Obsidian add-on for short, Christ-centered household checkups. The plugin ID remains `marriage-companion` so it can replace an existing installation without moving your vault data.
 
-## Use
+## Three focused workflows
 
-Open **Marriage Companion: Open family dashboard**, then choose **Family checkup**, **Marriage view**, or a member tab. A check-in can include one or more targets and records a separate rating, answer, focus, and next step for each selected area. Every check-in is a regular Markdown note under the configured `Marriage Companion/Check-ins/` folder. Add household members with **Add family member**; the legacy **Add child profile** command remains available as a compatibility alias.
+- **Family checkup** records the household as a group and only shows family-appropriate areas.
+- **Marriage checkup** records the marriage plus two active spouse profiles separately.
+- **Kids checkup** lets parents select one or more children and record independent entries for each.
 
-Use **Manage family checkup areas** to tailor every check-in area. Each area has a name, display order, default rating for future check-ins, Scripture references, and a custom discussion prompt. Editing an area preserves its stable ID, so past check-in history remains connected; it does not rewrite past notes.
+Each step asks for a rating, short answer, current focus, and next step. Scripture prompts remain visible while you work. The wizard is intentionally short and scroll-safe on iOS; one Markdown note is saved for the session.
 
-On first load, legacy marriage check-ins are backed up and converted to a clearly labeled shared family target. Existing child notes remain in place and receive a linked copy under `Marriage Companion/Members/`. The migration journal is stored beside the backup. Use **Verify Family Companion migration** to review counts; all migration writes are idempotent and ordinary Markdown remains readable even if a record needs manual repair.
+## Data and compatibility
 
-## Limits and care
+Records remain under the configured `Marriage Companion/` root:
 
-This plugin stores ordinary Markdown and does not encrypt records. It is not a replacement for pastoral, medical, mental-health, legal, or emergency help. For immediate danger, coercion, self-harm, or safety risk, seek local emergency help.
+```text
+Marriage Companion/
+  Check-ins/
+  Members/
+  Children/          # legacy child profiles remain readable
+  Migration Backups/
+```
+
+New check-ins use `type: family-companion-checkin`, `schema_version: 3`, and `checkup_kind: family|marriage|kids`. Older `marriage-companion-checkin` and version-2 records are read as shared legacy checkups and are never guessed into a spouse or child.
+
+Member profiles may be created as `spouse`, `child`, or `other`. Existing child notes are preserved. Managed summaries are refreshed with `Vault.process()` and user-written content outside the managed markers is retained.
+
+## Dashboard
+
+The dashboard provides Family, Marriage, member, and comparison views; transparent rating chips; areas needing care; recent checkups; and separate “Not recorded” states. Use the three start buttons to begin the appropriate workflow, or open a target tab to compare family, marriage, spouses, and children.
+
+## Migration
+
+Migration is explicit. Use **Preview v3 migration**, then **Run v3 migration** from plugin settings or the command palette. A timestamped byte-verified backup and journal are created before records are updated. **Verify migration** reports legacy and v3 records. Restore is intentionally manual so a backup can be reviewed before any replacement.
+
+## Settings
+
+Configure the root folder, default checkup type, spouse requirement, cadence, trend history length, and every area’s order, default rating, checkup mappings, target mappings, Scripture references, and prompt. Empty mappings can be used for a custom area that should appear everywhere.
+
+## Privacy and limitations
+
+The plugin stores ordinary Markdown files and does not encrypt them. It is a personal family reflection tool, not medical, emergency, professional counseling, or diagnostic software. Ratings are conversation prompts, not universal measurements.
 
 ## Development
 
-Run `npm install`, then `npm test`. Copy `main.js`, `manifest.json`, and `styles.css` into `.obsidian/plugins/marriage-companion/` to install manually.
+```text
+npm ci
+npm run typecheck
+npm run build
+```
+
+The add-on has no network, Dataview, Node-only, or desktop-only dependency and can run without the Red-Beard Dashboard. When Dashboard is installed, Family Companion registers a launcher module and a compact health widget through its public registration API.
