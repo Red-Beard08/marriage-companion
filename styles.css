@@ -47,3 +47,23 @@
 .marriage-companion-checkin-fields select, .marriage-companion-checkin-fields input, .marriage-companion-checkin-fields textarea { width: 100%; box-sizing: border-box; }
 .marriage-companion-checkin-fields textarea { min-height: 86px; resize: vertical; }
 @media (max-width: 700px) { .marriage-companion-health-grid { grid-template-columns: 1fr; } .marriage-companion-target-picker { grid-template-columns: 1fr 1fr; } .marriage-companion-checkin-fields { grid-template-columns: 1fr; } .marriage-companion-target-section { padding: 12px; } }
+
+/* Target-specific wizard: short, focused steps are easier to complete on phones. */
+.marriage-companion-wizard { display: grid; gap: 16px; }
+.marriage-companion-choice-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.marriage-companion-choice-grid button { min-height: 72px; font-weight: 700; }
+.marriage-companion-choice-grid button.is-selected { background: var(--interactive-accent); color: var(--text-on-accent); }
+.marriage-companion-area-picker { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.marriage-companion-wizard-nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; margin-top: 10px; padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+.marriage-companion-wizard .setting-item { border-top: 1px solid var(--background-modifier-border); padding: 14px 0; }
+.marriage-companion-comparison-grid { display: grid; grid-template-columns: minmax(170px, 1.5fr) repeat(auto-fit, minmax(120px, 1fr)); overflow-x: auto; gap: 0; border: 1px solid var(--background-modifier-border); border-radius: 10px; }
+.marriage-companion-comparison-grid > * { padding: 10px; border-right: 1px solid var(--background-modifier-border); border-bottom: 1px solid var(--background-modifier-border); min-width: 100px; }
+.marriage-companion-comparison-grid span.is-thriving, .marriage-companion-comparison-grid span.is-healthy { color: #56c596; }
+.marriage-companion-comparison-grid span.is-attention { color: #e69f00; }
+.marriage-companion-comparison-grid span.is-struggling, .marriage-companion-comparison-grid span.is-crisis { color: #e06c75; }
+@media (max-width: 700px) {
+  .marriage-companion-choice-grid, .marriage-companion-area-picker { grid-template-columns: 1fr; }
+  .marriage-companion-wizard-nav { justify-content: stretch; }
+  .marriage-companion-wizard-nav button { flex: 1 1 140px; min-height: 44px; }
+  .marriage-companion-comparison-grid { font-size: .82rem; }
+}
